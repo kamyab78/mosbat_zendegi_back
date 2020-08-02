@@ -25,20 +25,22 @@ SECRET_KEY = 't7utm5pg8!44cnwk1xe@y$7^w^a(_cb59$i!=j-6^t0*4y19k='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'rest_framework',
+    'rest_framework.authtoken',
+    'user',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -124,4 +126,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL= 'users.User'
+AUTH_USER_MODEL= 'core.User'

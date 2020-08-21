@@ -31,7 +31,6 @@ class PublicUserApiTests(TestCase):
 
     def test_user_exists(self):
         payload = {
-            'email': 'mosbat@gmail.com',
             'username': 'mosbatuser',
             'password': 'mosbat12345'
         }
@@ -41,20 +40,18 @@ class PublicUserApiTests(TestCase):
 
     def test_password_too_short(self):
         payload = {
-            'email': 'mosbat@gmail.com',
             'password': 'pw',
             'username': 'usertest'
         }
         res = self.client.post(CREATE_USER_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
         user_exists = get_user_model().objects.filter(
-            email=payload['email']
+            username=payload['username']
         )
         self.assertFalse(user_exists)
 
     def test_create_token_for_user(self):
         payload = {
-            'email': 'mosbat@gmail.com',
             'username': 'mosbatuser',
             'password': 'mosbat12345'
         }
@@ -64,11 +61,9 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_create_token_invalid_credentials(self):
-        create_user(email='mosbat@gmail.com',
-                    username='mosbatuser',
+        create_user(username='mosbatuser',
                     password='mosbat12345')
         payload = {
-            'email': 'mosbat@gmail.com',
             'username': 'mosbatuser',
             'password': 'mosbat'
         }
@@ -78,7 +73,6 @@ class PublicUserApiTests(TestCase):
 
     def test_create_token_no_user(self):
         payload = {
-            'email': 'mosbat@gmail.com',
             'username': 'mosbatuser',
             'password': 'mosbat12345'
         }
@@ -87,7 +81,7 @@ class PublicUserApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_create_token_missing_field(self):
-        res = self.client.post(TOKEN_URL, {'email': 'test', 'password': '',
+        res = self.client.post(TOKEN_URL, {'password': '',
                                            'username': 'user'})
         self.assertNotIn('token', res.data)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
